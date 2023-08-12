@@ -1,0 +1,97 @@
+﻿@model main6project.Models.ViewModels.Creatvm ; 
+
+@{
+    ViewData["Title"] = "Create";
+}
+@{
+    List<Provinetable> lasttest = ViewBag.provinceli;
+}
+<a href="c:\users\rayanstore\source\repos\main4project\wwwroot\lib\jquery\dist\jquery.min.map">c:\users\rayanstore\source\repos\main4project\wwwroot\lib\jquery\dist\jquery.min.map</a>
+<script src="c:\users\rayanstore\source\repos\main4project\wwwroot\lib\jquery\dist\jquery.min.js"></script>
+
+
+
+<h1>Create</h1>
+
+<h4>Maintable</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Family" class="control-label"></label>
+                <input asp-for="Family" class="form-control" />
+                <span asp-validation-for="Family" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="imageupload" type="file" />
+            </div>
+             
+
+                <div class="form-group">
+                    <label asp-for="Province" class="control-label"></label>
+                    <select asp-for="Province"
+                            asp-items="@(new SelectList(lasttest , "ProvinceId" ,  "ProvinceName"))"></select>
+                    <span asp-validation-for="Province" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="City" class="control-label"></label>
+                    <select asp-for="City"></select>
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+@section Scripts {
+    <script>
+
+        $("#Province").on("change", function (e) {
+            if ($("#Province").prop("SelectList") == 0) {
+                $("#City").addClass("hidden")
+            }
+            else {
+
+                var getid = $("#Province").val();
+
+
+                $.ajax({
+                    type: "post",
+                    url: "@Url.Action("getcity" , "Home")",
+                    data: { id: getid },
+                    success: function (result) {
+                        if (result.status == "success") {
+                            $("#City").empty();
+
+                            $.each(result.citylist, function (e) {
+                                $("#City").append($("<option></option>")
+                                    .val(result.citylist[e].id).html(result.citylist[e].name))
+                            })
+
+                        }
+                    }
+                })
+
+            }
+        })
+    </script>
+}
